@@ -31,6 +31,9 @@ EchoColor(){ # color, text
 
 Note(){ # text
 	# Prints the passed string in green
+	echo ""
+	echo ""
+	EchoColor "${GRN}" "################################################################################"
 	EchoColor "${GRN}" "$1";
 	EchoColor "${GRN}" "################################################################################"
 }
@@ -42,41 +45,49 @@ Navigate(){
   Note "Updating Repositories"
   apt update 
   Note "Upgrading Software"
-  apt upgrade 
+  apt upgrade -y
 
   Note "Installing Preliminary Software"
-  apt install software-properties-common apt-transport-https wget tasksel -y
+  apt install apt-transport-https tasksel -y
   
-  note "Installing LAMP web server"
-	tasksel install lamp-server
+  Note "Installing LAMP web server"
+  tasksel install lamp-server
   
   Note "Updating Repositories so we can install Webmin"
   wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
   
   Note "Adding Webmin Repositories"
-  add-apt-repository "deb [arch=amd64] http://download.webmin.com/download/repository sarge contrib"
+  add-apt-repository "deb http://download.webmin.com/download/repository sarge contrib"
   
   Note "Installing Webmin"
-  apt install webmin
+  apt install webmin -y
+
+  Note "Prepping for phpMyAdmin Unattended Install"
+  echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
+  #echo "phpmyadmin phpmyadmin/app-password-confirm password $APP_PASS" | debconf-set-selections
+  #echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOT_PASS" | debconf-set-selections
+  #echo "phpmyadmin phpmyadmin/mysql/app-pass password $APP_DB_PASS" | debconf-set-selections
+  #echo "phpmyadmin phpmyadmin/mysql/app-pass password A14227ec00" | debconf-set-selections
+  echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
+
+  Note "Installing phpMyAdmin"
+  apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl -y
   
-	Note "Installing phpMyAdmin"
-	apt-get install phpmyadmin php-mbstring php-gettext -y
+  Note "Reinforcing phpMyAdmin Security"
+  #phpenmod mcrypt
+  phpenmod mbstring
   
-	Note "Reinforcing phpMyAdmin Security"
-	phpenmod mcrypt
-	phpenmod mbstring
-  
-	Note "Restarting Apache webserver"
-	systemctl restart apache2
+  Note "Restarting Apache webserver"
+  systemctl restart apache2
   
   Note "Installing Samba FileServer"
-	tasksel install samba-server
+  tasksel install samba-server
   
   Note "Installing Samba Adders"
-	apt-get install ntfs-3g acl attr -y
+  apt-get install acl attr -y
   
   Note "Installing OpenVPN Server"
-	apt-get install openvpn easy-rsa -y
+  apt-get install openvpn easy-rsa -y
 }
 
 # xargs -a packages.txt sudo apt-get install
