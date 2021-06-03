@@ -99,15 +99,15 @@ MainConfig(){
 }
 
 Navigate(){
-  if ![ -e step1 ]; then
+  if ! [ -e step1 ]; then
     BaseUpdate
   fi
   
-  if ![ -e step2 ]; then
+  if ! [ -e step2 ]; then
     FirstUpgrade
   fi
   
-  if ![ -e step3 ]; then
+  if ! [ -e step3 ]; then
     MainConfig
   fi
   
@@ -117,3 +117,47 @@ Navigate(){
 
 # xargs -a packages.txt sudo apt-get install
 Navigate
+
+
+# sudo hostnamectl set-hostname dc1
+# UPDATE /etc/hosts with system name
+# sudo apt install samba smbclient winbind libpam-winbind libnss-winbind krb5-kdc libpam-krb5 -y
+# sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.orig
+# sudo mv /etc/krb5.conf /etc/krb5.conf.orig
+# sudo samba-tool domain provision --use-rfc2307 --interactive
+# https://blog.ricosharp.com/posts/2019/Samba-4-Active-Directory-Domain-Controller-on-Ubuntu-18-04-Server
+
+/*
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    en01:
+      addresses:
+      - 192.168.1.25/24
+      - "2001:1::1/64"
+      gateway4: 192.168.1.1
+      gateway6: "2001:1::2"
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        - 8.8.4.4
+/*
+
+/*
+/etc/netplan/99_config.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      addresses:
+        - 10.10.10.2/24
+      gateway4: 10.10.10.1
+      nameservers:
+          search: [mydomain, otherdomain]
+          addresses: [10.10.10.1, 1.1.1.1]
+sudo netplan apply
+*/
+
+# https://www.reddit.com/r/linuxadmin/comments/ll4fw1/samba4_domain_controller_primarysecondary/
