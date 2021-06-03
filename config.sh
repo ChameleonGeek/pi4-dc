@@ -38,56 +38,81 @@ Note(){ # text
 	EchoColor "${GRN}" "################################################################################"
 }
 
+BaseUpdate(){
+  Note "Updating Repositories - Stystem will reboot"
+  sudo apt update
+  echo "DONE" >> step1
+  sudo reboot
+}
 
+FirstUpgrade(){
+  Note "Upgrading Software - System will reboot"
+  sudo apt upgrade -y
+  echo "DONE" >> step2
+  sudo reboot
+}
 
-
-Navigate(){
-  Note "Updating Repositories"
-  apt update 
-  Note "Upgrading Software"
-  apt upgrade -y
-
+MainConfig(){
   Note "Installing Preliminary Software"
-  apt install apt-transport-https tasksel -y
+  sudo apt install apt-transport-https tasksel -y
   
   Note "Installing LAMP web server"
-  tasksel install lamp-server
+  sudo tasksel install lamp-server
   
   Note "Updating Repositories so we can install Webmin"
   wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
   
   Note "Adding Webmin Repositories"
-  add-apt-repository "deb http://download.webmin.com/download/repository sarge contrib"
+  sudo add-apt-repository "deb http://download.webmin.com/download/repository sarge contrib"
   
   Note "Installing Webmin"
-  apt install webmin -y
+  sudo apt install webmin -y
 
   Note "Prepping for phpMyAdmin Unattended Install"
-  echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
-  #echo "phpmyadmin phpmyadmin/app-password-confirm password $APP_PASS" | debconf-set-selections
+  sudo echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
+  sudo echo "phpmyadmin phpmyadmin/app-password-confirm password A14227ec00" | debconf-set-selections
+  sudo echo "phpmyadmin phpmyadmin/mysql/app-pass password A14227ec00" | debconf-set-selections
+  echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
   #echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOT_PASS" | debconf-set-selections
   #echo "phpmyadmin phpmyadmin/mysql/app-pass password $APP_DB_PASS" | debconf-set-selections
-  #echo "phpmyadmin phpmyadmin/mysql/app-pass password A14227ec00" | debconf-set-selections
-  echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
 
   Note "Installing phpMyAdmin"
-  apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl -y
+  sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl -y
   
   Note "Reinforcing phpMyAdmin Security"
   #phpenmod mcrypt
-  phpenmod mbstring
+  sudo phpenmod mbstring
   
   Note "Restarting Apache webserver"
-  systemctl restart apache2
+  sudo systemctl restart apache2
   
   Note "Installing Samba FileServer"
-  tasksel install samba-server
+  sudo tasksel install samba-server
   
   Note "Installing Samba Adders"
-  apt-get install acl attr -y
+  sudo apt-get install acl attr -y
   
   Note "Installing OpenVPN Server"
-  apt-get install openvpn easy-rsa -y
+  sudo apt-get install openvpn easy-rsa -y
+
+  echo "DONE" >> step3
+}
+
+Navigate(){
+  if ![ -e step1 ]; then
+    BaseUpdate
+  fi
+  
+  if ![ -e step2 ]; then
+    FirstUpgrade
+  fi
+  
+  if ![ -e step3 ]; then
+    MainConfig
+  fi
+  
+
+
 }
 
 # xargs -a packages.txt sudo apt-get install
