@@ -18,30 +18,38 @@ EchoColor(){ # color, text
 	echo "$1$2${NC}";
 }
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${RED}" "Answer No to VALIDATE PASSWORD COMPONENT!"
 EchoColor "${YEL}" "phpMyAdmin install will fail if you answer Yes"
 
 # shore up mySQL
 sudo mysql_secure_installation
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing webmin prerequisites"
 sudo apt install apt-transport-https curl wget software-properties-common -y
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing webmin"
 sudo apt install webmin -y
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Allowing webmin through the firewall"
 sudo ufw allow 10000
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing phpmyadmin"
 sudo apt install phpmyadmin php-mbstring -y 
 sudo phpenmod mbstring
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing samba and support for exFAT drives"
 sudo apt install samba exfat-fuse -y
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing FTP server"
 sudo apt install proftpd -y
 
+EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing bind DNS Server"
 sudo apt install bind9 bind9utils bind9-doc dnsutils -y
