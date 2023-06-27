@@ -15,7 +15,7 @@ YEL='\033[1;33m'   # Makes on-screen text yellow
 EchoColor(){ # color, text
 	# Prints the passed string onto the screen in the designated color
 	# Usage: EchoColor <color> <text>
-	echo -e "$1$2${NC}";
+	echo "$1$2${NC}";
 }
 
 EchoColor "${RED}" "Answer No to VALIDATE PASSWORD COMPONENT!"
