@@ -27,7 +27,8 @@ sudo mysql_secure_installation
 
 EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing webmin prerequisites"
-sudo apt install apt-transport-https curl wget software-properties-common -y
+sudo apt install apt-transport-https -y
+sudo apt install software-properties-common -y
 
 EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing webmin"
@@ -39,12 +40,14 @@ sudo ufw allow 10000
 
 EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing phpmyadmin"
-sudo apt install phpmyadmin php-mbstring -y 
+sudo apt install phpmyadmin -y 
+sudo apt install php-mbstring -y 
 sudo phpenmod mbstring
 
 EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing samba and support for exFAT drives"
-sudo apt install samba exfat-fuse -y
+sudo apt install samba -y
+sudo apt install exfat-fuse -y
 
 EchoColor "${GRN}" ""####################################################################################################"
 EchoColor "${GRN}" "Installing FTP server"
