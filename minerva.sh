@@ -4,6 +4,8 @@
 #                                  DEV SCRIPT FOR MINERVA - STEP 1
 ####################################################################################################
 ####################################################################################################
+# E: Unable to locate package php-{curl,intl,zip,soap,xml,gd,mbstring,bcmath,common,mysqli}
+
 BLU='\033[1;34m'   # Makes on-screen text blue
 CYA='\033[1;36m'   # Makes on-screen text cyan
 GRN='\033[1;32m'   # Makes on-screen text green
