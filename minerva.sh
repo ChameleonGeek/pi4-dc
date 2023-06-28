@@ -72,6 +72,7 @@ ProcessTwo(){
   	echo ""
  	GreenBar
  	GreenBar
+	EchoMain "Installing Debian Configuration Utilities"
 	apt install -y debconf-utils
 	EchoMain "Installing Apache Webserver"
 	apt install -y apache2
