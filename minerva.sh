@@ -32,12 +32,19 @@ EchoMain(){ # text
 	# Prints the passed string onto the screen.  Formats the text so that it stands out
 	# Usage: EchoMain <text>
 	GreenBar
-	EchoColor "${GRN}" $1
+	echo "${GRN}$1${NC}"
 	GreenBar
 }
 
 ProcessOne(){
 	# Performs the first part of the proces and drops a marker file to demonstrate completing this phase
+ 	GreenBar
+ 	GreenBar
+  	echo ""
+   	EchoColor "${CYA}" "Starting part one of the configuration process"
+  	echo ""
+ 	GreenBar
+ 	GreenBar
 	EchoMain "Adding signature for webmin repository"
 	curl -fsSL https://download.webmin.com/jcameron-key.asc | sudo gpg --dearmor -o /usr/share/keyrings/webmin.gpg
 	EchoMain "Adding webmin repository"
@@ -50,13 +57,21 @@ ProcessOne(){
 	BarTwo
 	EchoColor "${MAG}" "The system must be rebooted to complete the kernel update"
 	EchoColor "${MAG}" "Re-run this script after reboot is finished"
+	EchoColor "${YEL}" "Press <Enter> to reboot"
 	BarTwo
-	# TODO:: Handle input to initiate reboot
+	read dontcare
 	reboot
 }
 
 ProcessTwo(){
 	# Performs the second part of the proces and drops a marker file to demonstrate completing this phase
+ 	GreenBar
+ 	GreenBar
+  	echo ""
+   	EchoColor "${CYA}" "Starting part two of the configuration process"
+  	echo ""
+ 	GreenBar
+ 	GreenBar
 	apt install -y debconf-utils
 	EchoMain "Installing Apache Webserver"
 	apt install -y apache2
@@ -81,10 +96,19 @@ ProcessTwo(){
 	EchoColor "${YEL}" "After this, execute this script again"
 	BarTwo
 	touch ProcessTwoComplete
+ 	exit 1
 }
 
 ProcessThree(){
 	# Performs the last part of the proces and drops a marker file to demonstrate completing this phase 
+ 	GreenBar
+ 	GreenBar
+  	echo ""
+   	EchoColor "${CYA}" "Starting part three of the configuration process"
+  	echo ""
+ 	GreenBar
+ 	GreenBar
+  	echo ""
 	GreenBar
 	EchoColor "${RED}" "Answer No to VALIDATE PASSWORD COMPONENT!"
 	EchoColor "${YEL}" "phpMyAdmin install will fail if you answer Yes"
