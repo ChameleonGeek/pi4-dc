@@ -111,6 +111,7 @@ ProcessThree(){
  	GreenBar
   	echo ""
 	GreenBar
+   	EchoColor "${GRN}" "Preparing to secure MySQL"
 	EchoColor "${RED}" "Answer No to VALIDATE PASSWORD COMPONENT!"
 	EchoColor "${YEL}" "phpMyAdmin install will fail if you answer Yes"
 	GreenBar
